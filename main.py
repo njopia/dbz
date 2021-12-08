@@ -1,72 +1,72 @@
-from clases.DAO import Coneccion
+from clases.DAO import Luchadores
 import os
 os.system('cls')
-borrar=os.system("cls")
 
-Cocection=Coneccion()
+Conexion=Luchadores()
 
-devMode=False
-
+devMode=True
 
 def MostrarUniversos():
-    ListadoUniversos=Cocection.getUniversos()
+    ListadoUniversos=Conexion.getUniversos()
 
     for uni in ListadoUniversos:
         print (f" {uni[0]}) {uni[1]}")
         
 def InsertLuchador():
-    NombreLuchador=input("Ingresar el nombre del Luchador: ")
-    FechaNacimiento=input("Fecha de Nacimiento (YYYY-mm-dd): ")
-    DescripcionPeleador=input("Descripcion del peleador: ")
-    KI=input("Ingresar el KI del Luchador")
+    NombreLuchador=input("Ingresar el nombre del Luchador:  ")
+    FechaNacimiento=input("Fecha de Nacimiento (YYYY-mm-dd):  ")
+    DescripcionPeleador=input("Descripcion del peleador:  ")
+    KI=input("Ingresar el KI del Luchador:  ")
     
 
-    ListadoUniversos=Cocection.getUniversos()
+    ListadoUniversos=Conexion.getUniversos()
 
     for uni in ListadoUniversos:
         print (f" {uni[0]}) {uni[1]}")
 
-    IdUniverso=input("Seleccionar el numero del universo del Luchador")
+    IdUniverso=input("Seleccionar el numero del universo del Luchador:  ")
+    skills=input("Ingresar habilidad del jugador:  ")
+    salud=input("Ingresar puntos de vida del Luchador:  ")
 
-    Cocection.IngresoLuchador(NombreLuchador,FechaNacimiento,DescripcionPeleador,KI,IdUniverso)
+    Conexion.IngresoLuchador(NombreLuchador,FechaNacimiento,DescripcionPeleador,KI,IdUniverso, skills, salud)
     
-
 def MostrarLuchador():
 
-    ListadoLuchadores=Cocection.getLuchadores()
+    ListadoLuchadores=Conexion.getLuchadores()
 
     for uni in ListadoLuchadores:
-        print (f"{uni[0]}) Luchador: {uni[1]} - Universo: {uni[6]}")
+        if uni[3] == 1:
+            print (f"{uni[0]}) Luchador: {uni[1]} - Universo: {uni[6]}")
 
 def ModificarLuchador():
     
+        os.system('cls')
+        ListadoLuchadores=Conexion.getLuchadores()
+        for uni in ListadoLuchadores:
+                print (f"{uni[0]}) Luchador: {uni[1]} - Universo: {uni[6]} Estado: {uni[3]}")
+                
+        LuchadorModificar=input("\n Seleccione jugador a modificar: \n")
+        NombreLuchador=input("Ingresar el nombre del Luchador: ")
+        FechaNacimiento=input("Fecha de Nacimiento (YYYY-mm-dd): ")
+        DescripcionPeleador=input("Descripcion del peleador: ")
+        KI=input("Ingresar el KI del Luchador")
+        MostrarUniversos()
+        IdUniverso=input("Ingrese número de universo")
+        skills=input("Ingresar habilidad del jugador:  ")
+        salud=input("Ingresar puntos de vida del Luchador:  ")
+        Estado=input("Ingrese estado de jugador 1: activo / 0: inactivo")
     
-    ListadoLuchadores=Cocection.getLuchadores()
-    for uni in ListadoLuchadores:
-        print (f"{uni[0]}) Luchador: {uni[1]} - Universo: {uni[6]}")
-        
-    LuchadorModificar=input("\n Seleccione jugador a modificar: \n") 
+        Conexion.ModificarLuchador(NombreLuchador,FechaNacimiento,DescripcionPeleador,KI,IdUniverso, skills, salud, Estado,  LuchadorModificar)
 
-
-    NombreLuchador=input("Ingresar el nombre del Luchador: ")
-    FechaNacimiento=input("Fecha de Nacimiento (YYYY-mm-dd): ")
-    DescripcionPeleador=input("Descripcion del peleador: ")
-    KI=input("Ingresar el KI del Luchador")
-    MostrarUniversos()
-    IdUniverso=input("Ingrese número de universo")
-    Estado=input("Ingrese estado de jugador 1: activo / 0: inactivo")
-    
-    Cocection.ModificarLuchador(NombreLuchador,FechaNacimiento,DescripcionPeleador,KI,IdUniverso, Estado, LuchadorModificar)
-    
 def EliminarLuchador():
-    ListadoLuchadores=Cocection.getLuchadores()
+    ListadoLuchadores=Conexion.getLuchadores()
     for uni in ListadoLuchadores:
-        print (f"{uni[0]}) Luchador: {uni[1]} - Universo: {uni[6]}")
+        if uni[3]==1:
+            print (f"{uni[0]}) Luchador: {uni[1]} - Universo: {uni[6]}")
         
-    LuchadorModificar=int(input("\n Seleccione jugador a eliminar: \n"))
+    LuchadorEliminar=int(input("\n Seleccione jugador a eliminar: \n"))
     
-    Cocection.EliminarLuchador(LuchadorModificar)
-    
+    Conexion.EliminarLuchador(LuchadorEliminar)
     
 def CrudLuchadores():
     while True:
@@ -95,14 +95,42 @@ def CrudLuchadores():
             EliminarLuchador()  
         else:
             break  
-
+  
     
-if __name__=="__main__":
-    #print(Cocection.Select('SELECT * from luchadores_dbz where NombreLuchador="1" or 1="1"'))
+def AdminMode():
+    os.system("cls")
+    while True:
+        print("""MENU ADMIN: 
+        1.- Restaurar Base de datos. 
+        2.- Eliminar  Base de datos. 
+        0.- Volver Menu Principal   """)
+        OpcionMenu=input()
 
+        if OpcionMenu=='1':
+            resetconfirm=int(input("¿Desea realmente restaurar la base de datos?.\n Presione 1 para continuar"))
+            if resetconfirm==1:
+                #Conexion.VaciarDB()
+                Conexion.restaurarDB()
+            else:
+                print("Abortando....")    
+            
+        elif OpcionMenu=='2':
+           os.system("cls")
+           Conexion.VaciarDB()
+           
+              
+               
+        elif OpcionMenu=='4':
+            os.system("cls")
+            EliminarLuchador()  
+        else:
+            break  
+if __name__=="__main__":
+    #print(Conexion.Select('SELECT * from luchadores_dbz where NombreLuchador="1" or 1="1"'))
+    os.system("cls")
     while True:
         if devMode==True:
-            print("Dev Mode: Activado \nPresione 5 para restaurar BD \n")
+            print("Dev Mode: Activado \n\nPresione 0 para acceder\nal menú de administrador. \n")
         
         print(""" MENU DE TORNEO: \n1.- Mantenedor luchadores  \n2.- Batallas  \n3.- Historico de Batallas \n4.- SALIR  """)
         OpcionMenu=input()
@@ -114,14 +142,12 @@ if __name__=="__main__":
             pass   
         elif OpcionMenu=='3':
             pass    
+        elif OpcionMenu=='0' and devMode == True:
+            AdminMode()
         elif OpcionMenu=='4':
             print("Muchas gracias por utilizar el Sistema")
             break
-        elif OpcionMenu=='5' and devMode==True:
-            #DROP DATABASE `pruebas`;
-            pass
+        
+       
         else:
             print("Opcion no valida")
-        
-
-        
