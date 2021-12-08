@@ -2,6 +2,9 @@ import mysql.connector
 from mysql.connector import Error
 import time
 import os
+import colorama
+from colorama import Fore,Back,Style
+
 class Luchadores:
     def __init__(self):
         try:
@@ -125,9 +128,11 @@ class Luchadores:
                 cursor.execute(sqlTruncUniversos)
                 cursor.execute(foreignCheck1)
                 self.conector.commit() # Cuando se escribe,Updatea y elimina la info de commitea
-                print("Las filas han sido eliminadas exitosamente")
+                print(Back.GREEN+"Las filas han sido eliminadas exitosamente")
+                time.sleep(2)
             except Error as ex:
-                print (f"Existe un error en la conexion de la BD: {ex}")        
+                print (f"Existe un error en la conexion de la BD: {ex}")
+                input()        
                 
     def restaurarDB(self):
         if self.conector.is_connected():
@@ -204,7 +209,7 @@ class Luchadores:
                 cursor.execute(AddForeignKeys) """
                 
                 self.conector.commit() # Cuando se escribe,Updatea y elimina la info de commitea
-                print(f" \n Las filas han sido insertadas exitosamente.")
+                print(Back.GREEN+" Las filas han sido insertadas exitosamente.")
                 time.sleep(2)
                 os.system("cls")
             except Error as ex:

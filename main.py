@@ -1,11 +1,13 @@
 from clases.DAO import Luchadores
 import os
+import time
+import colorama
+from colorama import Fore, Back, Style
 os.system('cls')
 
 Conexion=Luchadores()
 
 devMode=True
-
 def MostrarUniversos():
     ListadoUniversos=Conexion.getUniversos()
 
@@ -33,11 +35,11 @@ def InsertLuchador():
 def MostrarLuchador():
 
     ListadoLuchadores=Conexion.getLuchadores()
-
     for uni in ListadoLuchadores:
-        if uni[3] == 1:
-            print (f"{uni[0]}) Luchador: {uni[1]} - Universo: {uni[6]}")
-
+        if uni[3] == 1:   
+            print (f"{uni[0]}) Luchador: {uni[1]} | Universo: {uni[6]}")
+    
+            
 def ModificarLuchador():
     
         os.system('cls')
@@ -98,39 +100,42 @@ def CrudLuchadores():
   
     
 def AdminMode():
-    os.system("cls")
+    
     while True:
+        os.system("cls")
         print("""MENU ADMIN: 
         1.- Restaurar Base de datos. 
         2.- Eliminar  Base de datos. 
         0.- Volver Menu Principal   """)
-        OpcionMenu=input()
+        OpcionMenu=int(input())
 
-        if OpcionMenu=='1':
-            resetconfirm=int(input("¿Desea realmente restaurar la base de datos?.\n Presione 1 para continuar"))
+        
+        if OpcionMenu==1:
+            resetconfirm=int(input(Back.RED+"¿Desea realmente restaurar la base de datos?\n Presione 1 para continuar"))
             if resetconfirm==1:
                 #Conexion.VaciarDB()
                 Conexion.restaurarDB()
             else:
-                print("Abortando....")    
-            
-        elif OpcionMenu=='2':
-           os.system("cls")
-           Conexion.VaciarDB()
+                print("Ingrese un valor correcto.")
+                time.sleep(2)
+                
            
-              
-               
-        elif OpcionMenu=='4':
+        elif OpcionMenu==2:
+           Conexion.VaciarDB()
+       
+        elif OpcionMenu==0:
             os.system("cls")
-            EliminarLuchador()  
+            break    
         else:
-            break  
+            pass
+            
 if __name__=="__main__":
     #print(Conexion.Select('SELECT * from luchadores_dbz where NombreLuchador="1" or 1="1"'))
+    colorama.init(autoreset=True)
     os.system("cls")
     while True:
         if devMode==True:
-            print("Dev Mode: Activado \n\nPresione 0 para acceder\nal menú de administrador. \n")
+            print(Back.CYAN+"Dev Mode: Activado \n\nPresione 0 para acceder\nal menú de administrador. \n")
         
         print(""" MENU DE TORNEO: \n1.- Mantenedor luchadores  \n2.- Batallas  \n3.- Historico de Batallas \n4.- SALIR  """)
         OpcionMenu=input()
@@ -150,4 +155,6 @@ if __name__=="__main__":
         
        
         else:
-            print("Opcion no valida")
+            print("Opción no valida. Por favor Reintente.")
+            time.sleep(2)
+            os.system("cls")
